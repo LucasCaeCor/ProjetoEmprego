@@ -1,0 +1,159 @@
+/* Estilo base */
+
+/* Estilos para o header e a barra de navegação */
+header {
+    background: linear-gradient(135deg, rgb(170, 93, 10), #388e3c); /* Gradiente escuro */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+main {
+    flex-grow: 1; /* Isso permite que o conteúdo principal ocupe o espaço restante */
+    padding: 20px;
+    margin-bottom: 80px; /* Adiciona espaço para não encostar no footer */
+    overflow: auto; /* Permite rolagem se necessário */
+}
+
+/* Estilos para os links de navegação */
+header nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+/* Efeito de hover nos links */
+header nav a:hover {
+    color: rgb(15, 15, 156); /* Cor mais clara ao passar o mouse */
+    transform: scale(1.1); /* Aumento no tamanho ao passar o mouse */
+}
+
+/* Responsividade para telas pequenas (mobile) */
+@media (max-width: 768px) {
+    header nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    header nav a {
+        margin: 10px 0;
+    }
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2f3b52, #1a1e29); /* Gradiente de fundo */
+    color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o corpo ocupe a altura total da tela */
+    overflow-y: auto; /* Habilita barra de rolagem se necessário */
+}
+
+/* Estilo do Formulário */
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 10px;
+    background: #f7f7f7; /* Fundo claro para o formulário */
+}
+
+form {
+    display: flex;
+    grid-template-columns: 1fr 1fr; /* Divide em duas colunas */
+    gap: 20px; /* Espaçamento entre os campos */
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+label {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    grid-column: span 2; /* Faz o botão ocupar as duas colunas */
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Estilo para os Campos */
+input[type="file"] {
+    padding: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .formulario {
+        width: 90%;
+    }
+
+    /* Muda o layout para uma coluna em telas pequenas */
+    form {
+        grid-template-columns: 1fr; /* Uma coluna */
+    }
+
+    button[type="submit"] {
+        grid-column: span 1; /* O botão ocupa a coluna inteira */
+    }
+}
+
+/* Estilo para o rodapé */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333; /* Cor do fundo */
+    color: white; /* Cor do texto */
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+}
+
+footer {
+    margin-top: auto; /* Isso força o footer a ir para o fundo */
+}

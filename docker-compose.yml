@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  # aplicação web (PHP+NGINX)
+  web:
+    image: lucasbruxoo/novo_progeto:emprego
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - net_principal
+    volumes:
+      - ./applications:/var/www
+      - ./docker/nginx/sites:/etc/nginx/sites-available
+      - ./work_easy.sql:/docker-entrypoint-initdb.d/work_easy.sql  # Inicialização do banco de dados
+    ports:
+      - "80:80"  # http
+      - "443:443" # https
+      - "8080-8089:8080-8089"
+    depends_on:
+      - mysql
+
+
+  # MySQL com Docker
+  mysql:
+    image: mysql:8.0.29-debian
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: work_easy
+      TZ: "America/Sao_Paulo"
+    networks:
+      - net_principal
+    ports:
+      - "3306:3306"  # (Opcional) Para MySQL local
+
+
+networks:
+  net_principal:
+
+volumes:
+  postgresql:
+  mysql_data:   # Volume nomeado para o MySQL
