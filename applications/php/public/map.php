@@ -267,7 +267,7 @@ function showUserCards(userCards) {
 
 
 
-=
+
         <div id="cards-container" class="mt-4">
             <!-- Seção aonde os cards vão aparecer -->
         </div>
