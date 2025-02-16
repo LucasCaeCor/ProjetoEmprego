@@ -76,6 +76,7 @@ if (!empty($search_query)) {
     <title>Home - Work Easy</title>
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/dropHome.css">
+    <script src="js/paginaAnterior.js"></script>
 </head>
 <body>
     <header>
@@ -225,5 +226,6 @@ if (!empty($search_query)) {
     <p>&copy; 2025 Trabalhe Fácil. Todos os direitos reservados.</p>
 </footer>
 <script src="js/home.js"></script>
+
 </body>
 </html>

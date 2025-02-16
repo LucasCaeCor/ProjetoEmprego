@@ -72,8 +72,9 @@ $following_count = $stmt_following->fetchColumn();
                 <p><strong>Descrição:</strong> <?php echo nl2br(htmlspecialchars($profile['descricao'])); ?></p>
             </div>
             <a href="direct.php?to=<?php echo $profile_id; ?>" class="button">Enviar Mensagem</a>
-            <a href="home.php" class="back-button">Voltar</a>
+            <a href="#" onclick="goBack()" class="back-button">Voltar</a>
         </div>
     </main>
+    <script src="js/profile.js"></script>
 </body>
 </html>

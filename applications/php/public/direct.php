@@ -93,7 +93,20 @@ $messages = $stmt->fetchAll();
             <textarea name="message" placeholder="Digite sua mensagem..." required></textarea>
             <button type="submit">Enviar</button>
         </form>
-        <a href="home.php" class="back-button">Voltar</a>
+        <a href="#" onclick="goBack()" class="back-button">Voltar</a>
+
+        <script>
+       function goBack() {
+    let lastPage = sessionStorage.getItem("lastPage");
+    
+    if (lastPage && lastPage !== window.location.href) {
+        window.location.href = lastPage;
+    } else {
+        window.location.href = "home.php"; // Página padrão caso não haja histórico
+    }
+}
+        </script>
+
     </main>
     <script>
 document.getElementById('clearChat').addEventListener('click', function() {

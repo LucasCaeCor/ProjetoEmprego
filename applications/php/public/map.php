@@ -31,6 +31,7 @@ $user_longitude = $user_data['longitude'] ?? -49.2771;
     <link rel="stylesheet" href="css/map.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgFfMs19BXGQhVLWBzdQbkbuwlQemqqpc" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/paginaAnterior.js"></script>
     <script>
     let map;
     let markers = [];
@@ -65,6 +66,9 @@ $user_longitude = $user_data['longitude'] ?? -49.2771;
             <!-- Seção aonde os cards vão aparecer -->
         </div>
     </main>
-    <script src="js/map.js"></script>
+
+    <script src="js/map.js">
+
+    </script>
 </body>
 </html>

@@ -445,16 +445,7 @@ body {
     z-index: 1; /* Garantir que a janela de chat fique acima da janela de mensagens */
 }
 
-#minimize-button {
-    background-color: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    z-index: 1;
-}
+
 
 .chat-header {
     display: flex;
@@ -618,4 +609,3 @@ footer {
 footer {
     margin-top: auto; /* Isso força o footer a ir para o fundo */
 }
-

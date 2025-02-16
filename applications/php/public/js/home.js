@@ -1,3 +1,5 @@
+
+
 // Função para abrir a janela de mensagens de um usuário específico
 function openMessageWindow(userId) {
     document.getElementById('to_user_id').value = userId;
