@@ -3,59 +3,27 @@ include('config/db.php');
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    echo json_encode(['error' => 'Usuário não autenticado']);
     exit;
 }
 
-if (!isset($_GET['id'])) {
-    header("Location: feed.php");
-    exit;
-}
-
-$post_id = $_GET['id'];
-
-// Busca a postagem no banco de dados
-$sql = "SELECT * FROM posts WHERE id = ? AND id_usuario = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$post_id, $_SESSION['user_id']]);
-$post = $stmt->fetch();
-
-if (!$post) {
-    echo "Post não encontrado ou você não tem permissão para editá-lo.";
-    exit;
-}
-
-// Atualizar post
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Verifique se os dados foram enviados via POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['conteudo'], $_POST['post_id'])) {
     $conteudo = $_POST['conteudo'];
+    $post_id = $_POST['post_id'];
+    $user_id = $_SESSION['user_id'];
 
-    if (!empty($conteudo)) {
-        $sql_update = "UPDATE posts SET conteudo = ? WHERE id = ?";
-        $stmt_update = $pdo->prepare($sql_update);
-        if ($stmt_update->execute([$conteudo, $post_id])) {
-            header("Location: feed.php");
-            exit;
-        } else {
-            echo "Erro ao atualizar a postagem.";
-        }
-    } else {
-        echo "O conteúdo não pode estar vazio.";
-    }
+    // Atualizar no banco de dados
+    $sql = "UPDATE posts SET conteudo = :conteudo WHERE id = :post_id AND id_usuario = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':conteudo' => $conteudo,
+        ':post_id' => $post_id,
+        ':user_id' => $user_id
+    ]);
+
+    echo json_encode(['success' => 'Post atualizado com sucesso']);
+} else {
+    echo json_encode(['error' => 'Dados não enviados corretamente']);
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Postagem</title>
-</head>
-<body>
-    <h2>Editar Postagem</h2>
-    <form action="" method="POST">
-        <textarea name="conteudo" rows="4" required><?php echo htmlspecialchars($post['conteudo']); ?></textarea>
-        <button type="submit">Atualizar</button>
-    </form>
-    <a href="feed.php">Voltar</a>
-</body>
-</html>

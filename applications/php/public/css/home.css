@@ -503,22 +503,7 @@ body {
 }
 
 /* Janela de Mensagens */
-.message-window {
-    position: fixed;
-    bottom: 20px;
-    right: 350px;
-    width: 300px;
-    max-width: 350px;
-    height: 400px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    padding: 15px;
-    z-index: 10; /* Garantir que a janela de mensagens fique acima do chat */
-    animation: slideIn 0.8s ease-out; /* Animação de entrada */
-}
+
 
 @keyframes slideIn {
     0% {
@@ -603,17 +588,7 @@ body {
 }
 
 /* Botão de Fechar para a Janela de Mensagens */
-.close-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 20px;
-    color: #333;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1;
-}
+
 
 @keyframes slideOut {
     0% {
@@ -625,7 +600,7 @@ body {
     }
 }
 
-/* Estilos gerais para o body */
+
 
 
 /* Estilo para o rodapé */
@@ -643,3 +618,4 @@ footer {
 footer {
     margin-top: auto; /* Isso força o footer a ir para o fundo */
 }
+

@@ -15,8 +15,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-
-
 // Busca histórias
 $sql = "SELECT stories.id, stories.descricao, stories.foto, users.id AS id_usuario, users.nome 
         FROM stories 
@@ -25,7 +23,6 @@ $sql = "SELECT stories.id, stories.descricao, stories.foto, users.id AS id_usuar
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $stories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 // Busca publicações
 $sql_posts = "SELECT p.id, p.conteudo, p.data_postagem, p.id_usuario, u.nome, u.foto 
@@ -37,9 +34,6 @@ $stmt_posts = $pdo->prepare($sql_posts);
 $stmt_posts->execute();
 $posts = $stmt_posts->fetchAll();
 
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -49,279 +43,9 @@ $posts = $stmt_posts->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/feed.css">
 </head>
 
-<style>
-
-
-    
-
-
-
-.add-story {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-}
-
-.stories {
-    width: 100%;
-    padding: 20px;
-    background-color: #f9f9f9;
-}
-
-.stories h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.stories-container {
-    display: flex;
-    gap: 15px;
-    overflow-x: auto;
-    padding: 10px 0;
-    scroll-behavior: smooth;
-}
-
-.stories-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.stories-container::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-}
-
-.story {
-    flex: 0 0 200px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.story img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.add-story {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    border: 2px dashed #ccc;
-    background-color: #fafafa;
-}
-
-.add-story textarea {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.add-story input[type="file"],
-.add-story button {
-    margin-top: 10px;
-}
-
-
-.post {
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.profile-photo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
-}
-
-.post-header h3 {
-    font-size: 18px;
-    color: #333;
-}
-
-.post p {
-    color: #333;
-    font-size: 16px;
-}
-
-.reactions {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-/* Ajustes para os botões de reações */
-.reactions button {
-    background-color: #f0f2f5;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-}
-
-.reactions button:hover {
-    background-color: #e4e6eb;
-}
-
-.reactions button:disabled {
-    background-color: #d1d3d8;
-    cursor: not-allowed;
-}
-
-/* Estilo do menu dropdown */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    border-radius: 5px;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 8px 12px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.post {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.profile-photo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.post-header h3 {
-    flex-grow: 1;
-    margin-left: 10px;
-}
-
-.comment-form input[type="text"] {
-    width: 80%;
-    padding: 8px;
-    border-radius: 5px;
-    margin-right: 10px;
-}
-
-.comment-form button {
-    padding: 8px 15px;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-}
-
-.comment-form button:hover {
-    background-color: #45a049;
-}
-
-/* Botão "Publicar" */
-form button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-form button[type="submit"]:hover {
-    background-color: #45a049;
-}
-
-
-.comments {
-    margin-top: 20px;
-    background-color: #f7f7f7;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.comment {
-    margin: 5px 0;
-    font-size: 14px;
-    color: #333;
-}
-
-.comment strong {
-    font-weight: bold;
-}
-
-.comment-form input {
-    width: 85%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-}
-
-.comment-form button {
-    background-color: #1877f2;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.comment-form button:hover {
-    background-color: #165eab;
-}
-
-</style>
 <body>
     <header>
         <nav>
@@ -333,57 +57,48 @@ form button[type="submit"]:hover {
     <main>
         <h1>Feed</h1>
         
-
         <!-- Histórias -->
         <section class="stories">
-    <h2>Histórias</h2>
+            <h2>Histórias</h2>
+            <!-- Container de histórias -->
+            <div class="stories-container">
+                <!-- Formulário para adicionar história -->
+                <div class="story add-story">
+                    <div class="add">
+                        <img src="uploads/<?php echo $user['foto'] ?: 'default.jpg'; ?>" alt="Foto de Perfil" class="profile-photo">
+                        <h3>Adicionar História</h3>
+                        <form action="add_story.php" method="POST" enctype="multipart/form-data">
+                            <label for="upload" class="upload-button">
+                                <span>+</span> Selecionar Mídia
+                            </label>
+                            <input type="file" id="upload" name="foto" accept="image/*" required hidden>
+                            <button type="submit">Postar História</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Exibindo as histórias -->
+                <?php if (!empty($stories)): ?>
+                    <?php foreach ($stories as $story): ?>
+                        <div class="story">
+                            <img src="uploads/<?php echo htmlspecialchars($story['foto']); ?>" alt="História de <?php echo htmlspecialchars($story['nome']); ?>">
+                            <p><strong><?php echo htmlspecialchars($story['nome']); ?></strong></p>
+                            <p><?php echo nl2br(htmlspecialchars($story['descricao'])); ?></p>
 
-    <!-- Container de histórias -->
-    <div class="stories-container">
-
-        <!-- Formulário para adicionar história -->
-        <div class="story add-story">
-            <div class="add">
-                <img src="uploads/<?php echo $user['foto'] ?: 'default.jpg'; ?>" alt="Foto de Perfil" class="profile-photo">
-                <h3>Adicionar História</h3>
-                <form action="add_story.php" method="POST" enctype="multipart/form-data">
-                    <label for="upload" class="upload-button">
-                        <span>+</span> Selecionar Mídia
-                    </label>
-                    <input type="file" id="upload" name="foto" accept="image/*" required hidden>
-                    <button type="submit">Postar História</button>
-                </form>
+                            <!-- Verificar se o usuário logado é o dono da história -->
+                            <?php if ($story['id_usuario'] == $_SESSION['user_id']): ?>
+                                <!-- Botão de excluir história -->
+                                <form action="delete_story.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta história?');">
+                                    <input type="hidden" name="story_id" value="<?php echo $story['id']; ?>">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Sem histórias ainda.</p>
+                <?php endif; ?>
             </div>
-        </div>
-
-        <!-- Exibindo as histórias -->
-<?php if (!empty($stories)): ?>
-    <?php foreach ($stories as $story): ?>
-        <div class="story">
-            <img src="uploads/<?php echo htmlspecialchars($story['foto']); ?>" alt="História de <?php echo htmlspecialchars($story['nome']); ?>">
-            <p><strong><?php echo htmlspecialchars($story['nome']); ?></strong></p>
-            <p><?php echo nl2br(htmlspecialchars($story['descricao'])); ?></p>
-
-            <!-- Verificar se o usuário logado é o dono da história -->
-            <?php if ($story['id_usuario'] == $_SESSION['user_id']): ?>
-                <!-- Botão de excluir história -->
-                <form action="delete_story.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta história?');">
-                    <input type="hidden" name="story_id" value="<?php echo $story['id']; ?>">
-                    <button type="submit" class="btn btn-danger">Excluir</button>
-                </form>
-            <?php endif; ?>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Sem histórias ainda.</p>
-<?php endif; ?>
-
-    </div>
-</section>
-
-
-
-
+        </section>
         <!-- Publicações -->
         <section class="feed">
     <h2>Publicações</h2>
@@ -400,16 +115,16 @@ form button[type="submit"]:hover {
     <?php if (!empty($posts)): ?>
         <?php foreach ($posts as $post): ?>
             <div class="post">
-                <div class="post-header">
+            <div class="post-header">
                     <img src="uploads/<?php echo htmlspecialchars($post['foto']); ?>" alt="Foto de <?php echo htmlspecialchars($post['nome']); ?>" class="profile-photo">
                     <h3><?php echo htmlspecialchars($post['nome']); ?></h3>
-                    
+
                     <!-- Dropdown de opções (somente para o dono da publicação) -->
                     <?php if ($post['id_usuario'] == $_SESSION['user_id']): ?>
                         <div class="dropdown">
                             <button class="dropbtn">&#x22EE;</button>
                             <div class="dropdown-content">
-                                <a href="edit_post.php?id=<?php echo $post['id']; ?>">Editar</a>
+                                <a href="#" onclick="openEditModal(<?php echo $post['id']; ?>, '<?php echo addslashes($post['conteudo']); ?>')">Editar</a>
                                 <a href="delete_post.php?id=<?php echo $post['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta publicação?');">Excluir</a>
                             </div>
                         </div>
@@ -467,121 +182,92 @@ form button[type="submit"]:hover {
 
 
                 <!-- Comentários -->
-            <div class="comments">
-                <h4>Comentários</h4>
-    <!-- Exibindo os comentários -->
-                <?php 
-                $sql_comments = "SELECT c.id, c.comentario, c.id_usuario AS id_comment_owner, u.nome 
-                                FROM comments c 
-                                JOIN users u ON c.id_usuario = u.id 
-                                WHERE c.id_post = :id_post";
-                $stmt_comments = $pdo->prepare($sql_comments);
-                $stmt_comments->execute([':id_post' => $post['id']]);
-                $comments = $stmt_comments->fetchAll();
+                <div class="comments">
+                    <h4>Comentários</h4>
+                    <!-- Exibindo os comentários -->
+                    <?php 
+                    $sql_comments = "SELECT c.id, c.comentario, c.id_usuario AS id_comment_owner, u.nome 
+                                    FROM comments c 
+                                    JOIN users u ON c.id_usuario = u.id 
+                                    WHERE c.id_post = :id_post";
+                    $stmt_comments = $pdo->prepare($sql_comments);
+                    $stmt_comments->execute([':id_post' => $post['id']]);
+                    $comments = $stmt_comments->fetchAll();
 
-                if (!empty($comments)): 
-                    foreach ($comments as $comment): ?>
-                        <div class="comment">
-                            <strong><?php echo htmlspecialchars($comment['nome']); ?>:</strong>
-                            <?php echo nl2br(htmlspecialchars($comment['comentario'])); ?>
+                    if (!empty($comments)): 
+                        foreach ($comments as $comment): ?>
+                            <div class="comment" id="comment-<?php echo $comment['id']; ?>">
+                                <strong><?php echo htmlspecialchars($comment['nome']); ?>:</strong>
+                                <p><?php echo nl2br(htmlspecialchars($comment['comentario'])); ?></p>
 
-                            <!-- Dropdown para editar ou excluir o comentário -->
-                            <?php
-                            // Verifica se o usuário logado é o dono do comentário ou da publicação
-                            $is_owner = ($_SESSION['user_id'] == $comment['id_comment_owner']) || ($_SESSION['user_id'] == $post['id_usuario']);
-                            if ($is_owner): ?>
-                                <div class="dropdown">
-                                    <button class="dropdown-btn">Opções</button>
-                                    <div class="dropdown-content">
-                                        <a href="editar_comentario.php?id_comentario=<?php echo $comment['id']; ?>&id_post=<?php echo $post['id']; ?>">Editar</a>
-                                        <a href="excluir_comentario.php?id_comentario=<?php echo $comment['id']; ?>&id_post=<?php echo $post['id']; ?>">Excluir</a>
+                                <!-- Dropdown para editar ou excluir o comentário -->
+                                <?php
+                                // Verifica se o usuário logado é o dono do comentário ou da publicação
+                                $is_owner = ($_SESSION['user_id'] == $comment['id_comment_owner']);
+                                if ($is_owner): ?>
+                                    <div class="dropdown">
+                                        <button class="dropdown-btn">Opções</button>
+                                        <div class="dropdown-content">
+                                            <!-- Editar Comentário -->
+                                            <a href="#" onclick="openEditCommentModal(<?php echo $comment['id']; ?>, '<?php echo addslashes(htmlspecialchars($comment['comentario'])); ?>')">Editar</a>
+
+                                            <!-- Excluir Comentário -->
+                                            <a href="excluir_comentario.php?id_comentario=<?php echo $comment['id']; ?>&id_post=<?php echo $post['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este comentário?')">Excluir</a>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; 
-                else: ?>
-                    <p>Sem comentários ainda.</p>
-                <?php endif; ?>
-                <!-- Formulário para novo comentário -->
-                <form action="comment.php" method="POST" class="comment-form">
-                    <input type="text" name="comentario" placeholder="Adicionar comentário..." required>
-                    <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
-                    <button type="submit">Comentar</button>
-                </form>
-            </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; 
+                    else: ?>
+                        <p>Sem comentários ainda.</p>
+                    <?php endif; ?>
+
+                    <!-- Formulário para novo comentário -->
+                    <form action="comment.php" method="POST" class="comment-form">
+                        <input type="text" name="comentario" placeholder="Adicionar comentário..." required>
+                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                        <button type="submit">Comentar</button>
+                    </form>
+                </div>
+                <!-- Modal de Edição de Comentário -->
+                <div id="editCommentModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeEditCommentModal()">&times;</span>
+                        <h2>Editar Comentário</h2>
+                        <form id="editCommentForm" method="POST">
+                            <textarea id="editCommentContent" name="comentario" rows="4" required></textarea>
+                            <input type="hidden" name="comentario_id" id="commentId">
+                            <input type="hidden" name="post_id" id="postId">
+                            <button type="submit">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </div>
 
 
+
+                            <!-- Modal de Edição -->
+                <div id="editPostModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeEditModal()">&times;</span>
+                        <h2>Editar Publicação</h2>
+                        <form id="editPostForm" method="POST">
+                            <textarea id="editPostContent" name="conteudo" rows="4" required></textarea>
+                            <input type="hidden" name="post_id" id="postId">
+                            <button type="submit">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
         <p>Sem publicações ainda.</p>
     <?php endif; ?>
+
+<!-- Script para abrir e fechar o Modal -->
+
 </section>
+</main>
 
-<!-- Estilo para o dropdown -->
-<style>
-/* Estilos para o dropdown */
-.comment .dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.comment .dropdown-btn {
-    background-color: #f1f1f1;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.comment .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 100px;
-    z-index: 1;
-}
-
-.comment .dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.comment .dropdown-content a {
-    padding: 8px;
-    text-decoration: none;
-    display: block;
-    color: black;
-}
-
-.comment .dropdown-content a:hover {
-    background-color: #ddd;
-}
-
-</style>
-
-    </main>
-
-    <script>
-        
-        document.querySelectorAll('.reactions button').forEach(button => {
-    button.addEventListener('click', function() {
-        const postId = this.getAttribute('data-post-id');
-        const reactionType = this.getAttribute('data-reaction');
-
-        fetch('add_reaction.php', {
-            method: 'POST',
-            body: new URLSearchParams({
-                'id_post': postId,
-                'tipo': reactionType
-            })
-        }).then(response => response.text()).then(data => {
-            console.log(data);  // Aqui você pode verificar se a resposta está correta
-            location.reload();  // Atualiza a página para refletir a nova reação
-        });
-    });
-});
-
-
-    </script>
+<script src="js/feed.js"></script>
 </body>
 </html>

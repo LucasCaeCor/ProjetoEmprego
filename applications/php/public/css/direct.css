@@ -1,0 +1,144 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cabeçalho com navegação */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo principal da página */
+main {
+    margin-top: 100px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #6f68683a;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Caixa de mensagens */
+.chat-box {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* Estilo das mensagens */
+.message {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.message-sender-photo {
+    width: 35px; /* Ajustado para tamanho adequado */
+    height: 35px; /* Ajustado para tamanho adequado */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.message strong {
+    font-size: 16px;
+}
+
+.message p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.message small {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Estilo para mensagens enviadas e recebidas */
+.message.sent {
+    background-color: #e1f5fe; 
+    align-self: flex-end;
+}
+
+.message.received {
+    background-color: #f1f1f1; 
+    align-self: flex-start;
+}
+
+/* Formulário para envio de mensagens */
+.message-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.message-form textarea {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.message-form button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.message-form button:hover {
+    background-color: #45a049;
+}
+
+/* Botão de voltar */
+.back-button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: #bbb;
+}

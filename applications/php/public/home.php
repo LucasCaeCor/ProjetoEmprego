@@ -21,7 +21,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id]);
 $senders = $stmt->fetchAll();
 
-
 // Função para buscar mensagens de um usuário específico
 function getMessages($from_user_id, $to_user_id, $pdo) {
     $sql = "SELECT messages.*, users.nome, users.foto, messages.timestamp 
@@ -33,7 +32,6 @@ function getMessages($from_user_id, $to_user_id, $pdo) {
     $stmt->execute([$from_user_id, $to_user_id, $to_user_id, $from_user_id]);
     return $stmt->fetchAll();
 }
-
 
 // Atualizar seguidores e seguindo
 $sql_followers = "SELECT COUNT(*) FROM seguidores WHERE id_seguido = ?";
@@ -60,8 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['message'])) {
     header("Location: home.php");
     }
 }
-
-
 // Pesquisa de usuários
 $search_query = $_GET['search'] ?? '';
 $users = [];
@@ -71,9 +67,6 @@ if (!empty($search_query)) {
     $stmt->execute(["%$search_query%", $user_id]);
     $users = $stmt->fetchAll();
 }
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -81,9 +74,8 @@ if (!empty($search_query)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Work Easy</title>
-
     <link rel="stylesheet" href="css/home.css">
-
+    <link rel="stylesheet" href="css/dropHome.css">
 </head>
 <body>
     <header>
@@ -165,7 +157,6 @@ if (!empty($search_query)) {
                     <?php
                     $query = $pdo->prepare("SELECT * FROM seguidores WHERE id_seguidor = ? AND id_seguido = ?");
                     $query->execute([$_SESSION['user_id'], $u['id']]);
-
                     if ($query->rowCount() > 0): ?>
                         <form method="POST" action="follow_action.php">
                             <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
@@ -177,7 +168,6 @@ if (!empty($search_query)) {
                             <button type="submit" class="btn-follow">Seguir</button>
                         </form>
                     <?php endif; ?>
-
                 </div>
             </div>
         <?php endforeach; ?>
@@ -185,51 +175,55 @@ if (!empty($search_query)) {
         <p class="no-users-found">Nenhum usuário encontrado.</p>
     <?php endif; ?>
 </div>
-
 <!-- Janela de Chat -->
 <div class="chat-container" id="chat-container">
     <button id="minimize-button" onclick="toggleChat()">-</button>
     <h3>Mensagens</h3>
     <div class="user-list">
-        <?php foreach ($senders as $sender): ?>
-            <?php
-                $sender_id = $sender['from_user_id'];
-                $sender_sql = "SELECT nome, foto FROM users WHERE id = ?";
-                $stmt = $pdo->prepare($sender_sql);
-                $stmt->execute([$sender_id]);
-                $sender_data = $stmt->fetch();
-                $sender_name = $sender_data['nome'];
-                $sender_photo = $sender_data['foto'] ?: 'default.jpg'; // Foto padrão caso não tenha
-            ?>
-            <div class="user-item" onclick="openMessageWindow(<?php echo $sender_id; ?>)">
-                <img src="uploads/<?php echo $sender_photo; ?>" alt="Foto do usuário" class="user-photo">
-                <span class="user-name"><?php echo $sender_name; ?></span>
+    <?php foreach ($senders as $sender): ?>
+        <?php
+        
+            $sender_id = $sender['from_user_id'];
+            $sender_sql = "SELECT nome, foto FROM users WHERE id = ?";
+            $stmt = $pdo->prepare($sender_sql);
+            $stmt->execute([$sender_id]);
+            $sender_data = $stmt->fetch();
+            $sender_name = $sender_data['nome'];
+            $sender_photo = $sender_data['foto'] ?: 'default.jpg'; // Foto padrão caso não tenha
+        ?>
+        <div class="user-item" onclick="openMessageWindow(<?php echo $sender_id; ?>)">
+            <img src="uploads/<?php echo $sender_photo; ?>" alt="Foto do usuário" class="user-photo">
+            <span class="user-name"><?php echo $sender_name; ?></span>
+
+            <!-- Dropdown de Ações para Excluir Conversa -->
+            <div class="message-actions">
+                <button class="dropdown-btn">☰</button>
+                <div class="dropdown-content">
+                    <a href="delete_conversation.php?user_id=<?php echo $sender_id; ?>" onclick="return confirm('Tem certeza que deseja excluir essa conversa?')">Excluir Conversa</a>
+                </div>
             </div>
-        <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
     </div>
+    
+</div>
+
 </div>
 
 <!-- Janela de Envio de Mensagem -->
 <div class="message-window" id="message-window">
     <button class="close-btn" onclick="closeMessageWindow()">X</button>
     <div class="message-list" id="message-list"></div>
+    
     <form method="POST" class="message-input">
         <input type="text" name="message" placeholder="Digite sua mensagem" required>
         <input type="hidden" name="to_user_id" id="to_user_id">
         <button type="submit">Enviar</button>
     </form>
-    
 </div>
-
-
 <footer>
     <p>&copy; 2025 Trabalhe Fácil. Todos os direitos reservados.</p>
 </footer>
-
 <script src="js/home.js"></script>
-
-
-
-
 </body>
 </html>
