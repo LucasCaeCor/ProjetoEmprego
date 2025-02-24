@@ -58,9 +58,12 @@ body {
 
 /* Janela de mensagens */
 #message-window {
+    bottom: -35px;
+    right: 350px;
+    margin-bottom: 50px;
     display: none;
     position: absolute;
-    background: #060b1b;
+    background: #121c3e61;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(22, 14, 35, 0.2);
@@ -475,10 +478,7 @@ body {
     transition: background-color 0.2s ease;
 }
 
-.user-item:hover {
-    background-color: #e4e6eb; /* Cor de hover */
-    transform: translateX(5px);
-}
+
 
 .user-photo {
     width: 30px; /* Tamanho reduzido */

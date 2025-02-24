@@ -203,25 +203,27 @@ if (!empty($search_query)) {
                     <a href="delete_conversation.php?user_id=<?php echo $sender_id; ?>" onclick="return confirm('Tem certeza que deseja excluir essa conversa?')">Excluir Conversa</a>
                 </div>
             </div>
+
+            
         </div>
     <?php endforeach; ?>
     </div>
     
 </div>
-
+    <!-- Janela de Envio de Mensagem -->
+    <div class="message-window slideIn" id="message-window">
+        <button class="close-btn" onclick="closeMessageWindow()">X</button>
+        <div class="message-list" id="message-list"></div>
+        
+        <form method="POST" class="message-input">
+            <input type="text" name="message" placeholder="Digite sua mensagem" required>
+            <input type="hidden" name="to_user_id" id="to_user_id">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
 </div>
 
-<!-- Janela de Envio de Mensagem -->
-<div class="message-window" id="message-window">
-    <button class="close-btn" onclick="closeMessageWindow()">X</button>
-    <div class="message-list" id="message-list"></div>
-    
-    <form method="POST" class="message-input">
-        <input type="text" name="message" placeholder="Digite sua mensagem" required>
-        <input type="hidden" name="to_user_id" id="to_user_id">
-        <button type="submit">Enviar</button>
-    </form>
-</div>
+
 <footer>
     <p>&copy; 2025 Trabalhe Fácil. Todos os direitos reservados.</p>
 </footer>
